@@ -1,8 +1,8 @@
 import { Heading, VFlow } from "bold-ui"
 import React from "react"
-import { db } from "./db"
 import { useLiveQuery } from "dexie-react-hooks"
-import { WorkoutView } from "./components/WorkoutView"
+import { WorkoutView } from "./WorkoutView"
+import { db } from "../db"
 
 export function SavedWorkoutsView() {
   const savedWorkouts = useLiveQuery(() => db.savedWorkouts.toArray())

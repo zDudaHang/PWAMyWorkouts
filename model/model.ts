@@ -12,10 +12,10 @@ export interface WorkoutModel {
   id?: number
   name: string
   description: string
-  creator: Creator
+  creator: CreatorModel
 }
 
-interface Creator {
+export interface CreatorModel {
   id?: number
   name: string
 }

@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Home } from "../feed/Home"
-import { SavedWorkoutsView } from "../SavedWorkoutsView"
 import { MY_SAVED_WORKOUTS_URL } from "./model"
 import React from "react"
+import { SavedWorkoutsView } from "../SavedWorkoutsView"
 
 export function RootView() {
   return (

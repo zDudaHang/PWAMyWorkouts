@@ -7,7 +7,4 @@
       "esModuleInterop": true,
       "strict": true
     },
-    "include": [
-      "../model/"
-    ]
   }
