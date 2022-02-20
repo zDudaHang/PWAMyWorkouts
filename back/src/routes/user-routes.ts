@@ -1,16 +1,16 @@
 import { Router } from "express"
-import { CREATORS, mocked_feed } from "./mock"
-import { CreatorModel } from "../../model/model"
+import { CreatorModel } from "../../../model/model"
+import { CREATORS, mocked_feed } from "../mock"
 
-const router = Router()
+const user_router = Router()
 
 const following: CreatorModel[] = []
 
-router.get("/feed", (_, res) => {
+user_router.get("/feed", (_, res) => {
   res.json(mocked_feed)
 })
 
-router.put("/follow/:creatorId", (req, res) => {
+user_router.put("/follow/:creatorId", (req, res) => {
   const creatorId = Number(req.params.creatorId)
   if (creatorId && CREATORS.has(creatorId)) {
     const creator = CREATORS.get(creatorId)
@@ -24,4 +24,4 @@ router.put("/follow/:creatorId", (req, res) => {
   }
 })
 
-export default router
+export default user_router

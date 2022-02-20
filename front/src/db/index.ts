@@ -1,5 +1,5 @@
 import Dexie, { Table } from "dexie"
-import { WorkoutModel } from "../model/model"
+import { WorkoutModel } from "../../../model/model"
 
 export class MyWorkoutDexie extends Dexie {
   savedWorkouts!: Table<WorkoutModel>

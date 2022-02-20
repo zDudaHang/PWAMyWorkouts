@@ -1,13 +1,12 @@
 {
     "compilerOptions": {
       "target": "es6",
+      "jsx": "react-jsx",
       "module": "commonjs",
       "rootDir": "./",
       "outDir": "./build",
       "esModuleInterop": true,
-      "strict": true
-    },
-    "include": [
-      "../model/"
-    ]
-  }
+      "strict": true,
+      "allowJs": true,
+    }
+}

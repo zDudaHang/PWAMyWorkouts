@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { VFlow } from "bold-ui"
 import { PublicationView } from "./PublicationView"
-import { FEED_API_URL } from "../../api-urls"
 import { CreatorModel, FeedModel } from "../../../../model/model"
 
 export function Home() {
@@ -15,7 +14,7 @@ export function Home() {
   }
 
   useEffect(() => {
-    fetch(FEED_API_URL).then((response) => {
+    fetch("api/feed").then((response) => {
       response.json().then((feed: FeedModel) => {
         setFeed(feed)
       })
@@ -24,6 +23,7 @@ export function Home() {
 
   return (
     <VFlow>
+      {process.env.REACT_APP_TESTE}
       {feed?.publications?.map((publication, index) => (
         <PublicationView
           key={index}

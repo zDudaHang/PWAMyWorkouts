@@ -1,10 +1,9 @@
 import { Button, Heading, Icon, VFlow } from "bold-ui"
 import React from "react"
-import { WorkoutView } from "../WorkoutView"
 import { db } from "../../db"
-import { FOLLOWING_API_URL } from "../../api-urls"
 import { CreatorModel, PublicationModel } from "../../../../model/model"
-import { verifyNotificationPermission } from "../../util"
+import { subscribeUser, verifyNotificationPermission } from "../../util"
+import { WorkoutView } from "../WorkoutView"
 
 interface PublicationViewProps {
   publication: PublicationModel
@@ -26,13 +25,14 @@ export function PublicationView(props: PublicationViewProps) {
   }
 
   const handleFollowClick = () => {
-    const requestOptions = {
+    const request1Options = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
     }
-    fetch(`${FOLLOWING_API_URL}/${workout.creator.id}`, requestOptions)
+    fetch(`api/follow/${workout.creator.id}`, request1Options)
     addNewFollowing(workout.creator)
     verifyNotificationPermission(workout.creator.name)
+    subscribeUser()
   }
 
   return (

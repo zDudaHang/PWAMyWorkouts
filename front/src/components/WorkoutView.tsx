@@ -1,6 +1,6 @@
-import { WorkoutModel } from "../model/model"
 import React from "react"
 import { VFlow, Text, Heading } from "bold-ui"
+import { WorkoutModel } from "../../../model/model"
 
 interface WorkoutProps {
   workout: WorkoutModel
