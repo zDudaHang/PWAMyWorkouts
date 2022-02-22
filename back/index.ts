@@ -19,14 +19,12 @@ const options: cors.CorsOptions = {
   origin: ALLOWED_ORIGINS,
 }
 
-console.log(process.env.REACT_APP_TESTE)
-
 app.use(cors(options))
 
-if (process.env.REACT_APP_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
     `mailto:${process.env.PUSH_EMAIL}`,
-    process.env.REACT_APP_VAPID_PUBLIC_KEY,
+    process.env.VAPID_PUBLIC_KEY,
     process.env.VAPID_PRIVATE_KEY
   )
   app.use("/push", push_router)

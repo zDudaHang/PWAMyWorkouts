@@ -26,8 +26,7 @@ export function verifyNotificationPermission(creatorName: string) {
 
 export function subscribeUser() {
   if (navigator.serviceWorker) {
-    navigator.serviceWorker.ready.then(function (reg) {
-      console.log(process.env.REACT_APP_VAPID_PUBLIC_KEY)
+    navigator.serviceWorker.ready.then((reg) => {
       if (process.env.REACT_APP_VAPID_PUBLIC_KEY) {
         reg.pushManager
           .subscribe({
@@ -37,8 +36,7 @@ export function subscribeUser() {
             ),
           })
           .then(
-            function (pushSubscription) {
-              console.log(pushSubscription)
+            (pushSubscription) => {
               fetch("push/subscribe", {
                 method: "POST",
                 body: JSON.stringify(pushSubscription),
@@ -47,16 +45,14 @@ export function subscribeUser() {
                 },
               }).then((response) => console.log(response))
             },
-            function (error) {
-              console.log(error)
-            }
+            (error) => console.log(error)
           )
       }
     })
   }
 }
 
-export function urlBase64ToUint8Array(base64String: string) {
+function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
   const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/")
 
