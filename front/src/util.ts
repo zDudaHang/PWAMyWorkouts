@@ -20,6 +20,7 @@ export function verifyNotificationPermission(creatorName: string) {
       )
     } else {
       alert(`Sucesso ! Agora você está seguindo o ${creatorName}`)
+      subscribeUser()
     }
   }
 }

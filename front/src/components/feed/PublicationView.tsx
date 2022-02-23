@@ -2,7 +2,7 @@ import { Button, Heading, Icon, VFlow } from "bold-ui"
 import React from "react"
 import { db } from "../../db"
 import { CreatorModel, PublicationModel } from "../../../../model/model"
-import { subscribeUser, verifyNotificationPermission } from "../../util"
+import { verifyNotificationPermission } from "../../util"
 import { WorkoutView } from "../WorkoutView"
 
 interface PublicationViewProps {
@@ -32,7 +32,6 @@ export function PublicationView(props: PublicationViewProps) {
     fetch(`api/follow/${workout.creator.id}`, request1Options)
     addNewFollowing(workout.creator)
     verifyNotificationPermission(workout.creator.name)
-    subscribeUser()
   }
 
   return (

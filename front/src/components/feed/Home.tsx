@@ -23,7 +23,6 @@ export function Home() {
 
   return (
     <VFlow>
-      {process.env.REACT_APP_TESTE}
       {feed?.publications?.map((publication, index) => (
         <PublicationView
           key={index}
