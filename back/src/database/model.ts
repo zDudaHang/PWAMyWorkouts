@@ -1,0 +1,1 @@
+export const DUPLICATED_TABLE_CODE_ERROR = "42P07"

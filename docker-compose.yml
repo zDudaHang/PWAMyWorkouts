@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  database:
+    container_name: my-workout-database
+    image: postgres:12.4-alpine
+    ports:
+      #     Porta da maquina : porta do container
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: my-workout-database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin

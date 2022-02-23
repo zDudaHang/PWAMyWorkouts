@@ -5,11 +5,14 @@ import webpush from "web-push"
 import push_router from "./src/routes/push-routes"
 import { config as configEnv } from "dotenv"
 import { json } from "body-parser"
+import { configureDataBase } from "./src/database/config"
 
 const app = express()
 const PORT = 8000
 
 configEnv()
+
+configureDataBase()
 
 app.use(json())
 

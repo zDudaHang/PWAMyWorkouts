@@ -8,6 +8,8 @@ push_router.post("/subscribe", (req, res) => {
   //get push subscription object from the request
   const subscription = req.body
 
+  console.log(subscription)
+
   //send status 201 for the request
   res.status(201).json({})
 
