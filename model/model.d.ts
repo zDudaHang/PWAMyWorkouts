@@ -25,6 +25,11 @@ export interface UserModel {
   username: string
 }
 
-export interface CreateUserResponseModel {
+export interface AuthenticationResponseModel {
   id: number
+}
+
+export interface LoginRequestModel {
+  username: string
+  password: string
 }

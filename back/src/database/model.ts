@@ -1,1 +1,2 @@
 export const DUPLICATED_TABLE_CODE_ERROR = "42P07"
+export const KEY_ALREADY_EXISTS = "23505"

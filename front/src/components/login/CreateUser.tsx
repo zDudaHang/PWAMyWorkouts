@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { Button, Cell, Grid, Heading, Link, VFlow } from "bold-ui"
+import { Button, Cell, Grid, Heading, VFlow } from "bold-ui"
 import {
   AuthenticationResponseModel,
   LoginRequestModel,
@@ -8,16 +8,12 @@ import { LoggedUserContext } from "../context/LoggedUserContext"
 import { Field, Form, FormRenderProps } from "react-final-form"
 import { PasswordFieldAdapter, TextFieldAdapter } from "../Adapters"
 import { useNavigate } from "react-router-dom"
-import {
-  CREATE_USER_URL,
-  FEED_URL,
-  LOCAL_STORAGE_LOGGED_USER,
-} from "../root/model"
+import { FEED_URL } from "../root/model"
 import { isEmpty } from "lodash"
-import { FormApi } from "final-form"
 import { StatusCodes } from "http-status-codes"
+import { FormApi } from "final-form"
 
-export function Login() {
+export function CreateUser() {
   const { setUser } = useContext(LoggedUserContext)
   const navigate = useNavigate()
 
@@ -26,19 +22,17 @@ export function Login() {
     formApi: FormApi<LoginRequestModel>
   ) => {
     if (!isEmpty(values)) {
-      const requestOptions = {
-        method: "POST",
-        body: JSON.stringify(values),
+      const request1Options = {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
       }
-      fetch("api/login", requestOptions).then((response) => {
+      fetch(
+        `api/createUser/${values.username}/${values.password}`,
+        request1Options
+      ).then((response) => {
         if (response.status === StatusCodes.OK)
           response.json().then((response: AuthenticationResponseModel) => {
             setUser({ id: response.id, username: values.username })
-            window.localStorage.setItem(
-              LOCAL_STORAGE_LOGGED_USER,
-              JSON.stringify({ id: response.id, username: values.username })
-            )
             navigate(FEED_URL)
           })
         else if (response.status === StatusCodes.UNAUTHORIZED) {
@@ -73,7 +67,7 @@ export function Login() {
           </Cell>
           <Cell size={6}>
             <Button type="submit" kind="primary">
-              Enter
+              Create
             </Button>
           </Cell>
         </Grid>
@@ -83,8 +77,7 @@ export function Login() {
 
   return (
     <VFlow style={{ margin: "1rem" }}>
-      <Heading level={1}>Login</Heading>
-      <Link href={CREATE_USER_URL}>Create a new user</Link>
+      <Heading level={1}>Creating a new user</Heading>
       <Form<LoginRequestModel> onSubmit={handleSubmit} render={renderForm} />
     </VFlow>
   )
