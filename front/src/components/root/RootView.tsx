@@ -6,10 +6,12 @@ import { Login } from "../login/Login"
 import { Feed } from "../feed/Feed"
 import { CreateUser } from "../login/CreateUser"
 import { PrivateRoute } from "./PrivateRoute"
+import { Navbar } from "../Navbar"
 
 export function RootView() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path={CREATE_USER_URL} element={<CreateUser />} />
