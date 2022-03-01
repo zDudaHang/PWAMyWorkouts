@@ -35,10 +35,10 @@ user_router.post("/login", async (req, res) => {
   }
 })
 
-user_router.put("/createUser/:username/:password", (req, res) => {
-  const username = req.params.username
-  const password = req.params.password
-  if (username && password) {
+user_router.post("/createUser", (req, res) => {
+  const credentials: LoginRequestModel = req.body
+  if (!isEmpty(credentials)) {
+    const { username, password } = credentials
     client
       .query(
         "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id",
