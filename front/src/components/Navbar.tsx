@@ -24,7 +24,7 @@ export function Navbar() {
       alignItems="center"
     >
       <Text>My Workouts</Text>
-      {user && <Text>Bem-vindo(a), {user.username}</Text>}
+      {user && <Text>Welcome, {user.username}</Text>}
       <Link href={FEED_URL}>Feed</Link>
       <Link href={MY_SAVED_WORKOUTS_URL}>My saved workouts</Link>
       <Button size="small" skin="ghost" onClick={handleLogout}>

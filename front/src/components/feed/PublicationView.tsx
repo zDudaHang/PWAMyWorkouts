@@ -45,14 +45,14 @@ export function PublicationView(props: PublicationViewProps) {
       <WorkoutView workout={workout} />
       <Button size="small" skin="ghost" onClick={handleClick}>
         <Icon icon="download" style={{ marginRight: "0.5rem" }} />
-        Salvar
+        Save
       </Button>
       <Button size="small" skin="ghost" onClick={handleFollowClick}>
         <Icon
           icon={isFollowing ? "bellFilled" : "bellOutline"}
           style={{ marginRight: "0.5rem" }}
         />
-        Seguir {workout.creator.name}
+        Follow {workout.creator.name}
       </Button>
     </VFlow>
   )
