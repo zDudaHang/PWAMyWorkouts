@@ -8,7 +8,6 @@ export function LoggedUserContextProvider({ children }: any) {
 
   useEffect(() => {
     const user = window.localStorage.getItem(LOCAL_STORAGE_LOGGED_USER)
-    console.log(user)
     if (user) {
       setUser(JSON.parse(user))
     }

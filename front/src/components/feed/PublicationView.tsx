@@ -1,23 +1,19 @@
-import { Button, Heading, Icon, VFlow } from "bold-ui"
+import { Button, Icon, VFlow } from "bold-ui"
 import React, { useContext } from "react"
 import { db } from "../../db"
-import { CreatorModel, PublicationModel } from "../../../../model/model"
+import { CreatorModel, WorkoutModel } from "../../../../model/model"
 import { verifyNotificationPermission } from "../../util"
 import { WorkoutView } from "../WorkoutView"
 import { LoggedUserContext } from "../context/LoggedUserContext"
 
 interface PublicationViewProps {
-  publication: PublicationModel
+  workout: WorkoutModel
   isFollowing: boolean
   addNewFollowing: (creator: CreatorModel) => void
 }
 
 export function PublicationView(props: PublicationViewProps) {
-  const {
-    publication: { title, date, workout },
-    isFollowing,
-    addNewFollowing,
-  } = props
+  const { workout, isFollowing, addNewFollowing } = props
 
   const { user } = useContext(LoggedUserContext)
 
@@ -34,14 +30,11 @@ export function PublicationView(props: PublicationViewProps) {
     }
     fetch(`api/follow/${workout.creator.id}/${user?.id}`, request1Options)
     addNewFollowing(workout.creator)
-    verifyNotificationPermission(workout.creator.name)
+    verifyNotificationPermission(workout.creator.username)
   }
 
   return (
     <VFlow vSpacing={0.5} style={{ marginLeft: "1rem" }}>
-      <Heading level={2} style={{ marginBottom: "-0.5rem" }}>
-        {`${title} (${date})`}
-      </Heading>
       <WorkoutView workout={workout} />
       <Button size="small" skin="ghost" onClick={handleClick}>
         <Icon icon="download" style={{ marginRight: "0.5rem" }} />
@@ -52,7 +45,7 @@ export function PublicationView(props: PublicationViewProps) {
           icon={isFollowing ? "bellFilled" : "bellOutline"}
           style={{ marginRight: "0.5rem" }}
         />
-        Follow {workout.creator.name}
+        Follow {workout.creator.username}
       </Button>
     </VFlow>
   )

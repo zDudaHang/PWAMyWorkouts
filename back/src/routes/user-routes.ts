@@ -1,14 +1,19 @@
 import { assert } from "console"
 import { Router } from "express"
 import { client } from "../.."
-import { mocked_feed } from "../mock"
 import { isEmpty, isEqual } from "lodash"
 import {
   AuthenticationResponseModel,
+  CreateWorkoutRequestModel,
   LoginRequestModel,
+  WorkoutModel,
 } from "../../../model/model"
 import { QueryResult, DatabaseError } from "pg"
-import { CreateUserQueryResult, LoginQueryResultModel } from "./model"
+import {
+  CreateUserQueryResult,
+  FeedQueryResult,
+  LoginQueryResultModel,
+} from "./model"
 import { constants } from "http2"
 import { KEY_ALREADY_EXISTS } from "../database/model"
 
@@ -60,8 +65,35 @@ user_router.post("/createUser", (req, res) => {
   }
 })
 
+user_router.post("/createWorkout", (req, res) => {
+  const newWorkout: CreateWorkoutRequestModel = req.body
+  if (!isEmpty(newWorkout)) {
+    const { title, description, creatorId } = newWorkout
+    client
+      .query(
+        "INSERT INTO workouts (creator_id, title, description) VALUES ($1, $2, $3)",
+        [creatorId, title, description]
+      )
+      .then((value: QueryResult<CreateUserQueryResult>) => {
+        if (value.rowCount === 1) res.sendStatus(constants.HTTP_STATUS_OK)
+      })
+  }
+})
+
 user_router.get("/feed", (_, res) => {
-  res.json(mocked_feed)
+  client
+    .query(
+      "SELECT w.*, u.username FROM workouts w INNER JOIN users u ON w.creator_id = u.id LIMIT 10"
+    )
+    .then((value: QueryResult<FeedQueryResult>) => {
+      const feed: WorkoutModel[] = value.rows.map((workout) => ({
+        id: workout.id,
+        title: workout.title,
+        description: workout.description,
+        creator: { id: workout.creatorId, username: workout.username },
+      }))
+      res.json(feed)
+    })
 })
 
 user_router.put("/follow/:followed_user_id/:follower_user_id", (req, res) => {

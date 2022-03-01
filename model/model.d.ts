@@ -1,23 +1,13 @@
-export interface FeedModel {
-  publications?: PublicationModel[]
-}
-
-export interface PublicationModel {
-  title: string
-  workout: WorkoutModel
-  date: string
-}
-
 export interface WorkoutModel {
   id?: number
-  name: string
+  title: string
   description: string
   creator: CreatorModel
 }
 
 export interface CreatorModel {
   id?: number
-  name: string
+  username: string
 }
 
 export interface UserModel {
@@ -32,4 +22,10 @@ export interface AuthenticationResponseModel {
 export interface LoginRequestModel {
   username: string
   password: string
+}
+
+export interface CreateWorkoutRequestModel {
+  title: string
+  description: string
+  creatorId: number
 }

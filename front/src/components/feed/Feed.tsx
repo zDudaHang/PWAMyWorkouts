@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { VFlow } from "bold-ui"
 import { PublicationView } from "./PublicationView"
-import { CreatorModel, FeedModel } from "../../../../model/model"
+import { CreatorModel, WorkoutModel } from "../../../../model/model"
 
 export function Feed() {
-  const [feed, setFeed] = useState<FeedModel>()
+  const [feed, setFeed] = useState<WorkoutModel[]>()
   const [following, setFollowing] = useState<CreatorModel[]>([])
 
   const addNewFollowing = (creator: CreatorModel) => {
@@ -15,7 +15,7 @@ export function Feed() {
 
   useEffect(() => {
     fetch("api/feed").then((response) => {
-      response.json().then((feed: FeedModel) => {
+      response.json().then((feed: WorkoutModel[]) => {
         setFeed(feed)
       })
     })
@@ -23,12 +23,12 @@ export function Feed() {
 
   return (
     <VFlow>
-      {feed?.publications?.map((publication, index) => (
+      {feed?.map((workout, index) => (
         <PublicationView
           key={index}
-          publication={publication}
+          workout={workout}
           addNewFollowing={addNewFollowing}
-          isFollowing={following.includes(publication.workout.creator)}
+          isFollowing={following.includes(workout.creator)}
         />
       ))}
     </VFlow>

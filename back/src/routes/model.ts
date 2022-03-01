@@ -6,3 +6,11 @@ export interface LoginQueryResultModel {
 export interface CreateUserQueryResult {
   id: number
 }
+
+export interface FeedQueryResult {
+  id: number
+  creatorId: number
+  title: string
+  description: string
+  username: string
+}
