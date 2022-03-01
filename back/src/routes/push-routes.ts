@@ -1,25 +1,28 @@
 import { Router } from "express"
+import { constants } from "http2"
 import webpush from "web-push"
+import { client } from "../.."
+import { SubscriptionRequestModel } from "../../../model/model"
 
 const push_router = Router()
 
-//subscribe route
 push_router.post("/subscribe", (req, res) => {
-  //get push subscription object from the request
-  const subscription = req.body
+  const subscriptionRequest: SubscriptionRequestModel = req.body
 
-  console.log(subscription)
+  const {
+    userId,
+    subscription: {
+      endpoint,
+      keys: { auth, p256dh },
+    },
+  } = subscriptionRequest
 
-  //send status 201 for the request
-  res.status(201).json({})
-
-  //create paylod: specified the detals of the push notification
-  const payload = JSON.stringify({ title: "Section.io Push Notification" })
-
-  //pass the object into sendNotification fucntion and catch any error
-  webpush
-    .sendNotification(subscription, payload)
-    .catch((err) => console.error(err))
+  client
+    .query(
+      "INSERT INTO subscriptions (endpoint, sub_public_key, sub_private_key, sub_user_id) VALUES ($1, $2, $3, $4)",
+      [endpoint, p256dh, auth, userId]
+    )
+    .then(() => res.sendStatus(constants.HTTP_STATUS_OK))
 })
 
 export default push_router

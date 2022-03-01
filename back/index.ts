@@ -6,6 +6,7 @@ import push_router from "./src/routes/push-routes"
 import { config as configEnv } from "dotenv"
 import { json } from "body-parser"
 import { configureDataBase } from "./src/database/config"
+import path from "path"
 
 const app = express()
 const PORT = 8000
@@ -23,6 +24,8 @@ const options: cors.CorsOptions = {
 }
 
 app.use(cors(options))
+
+app.use(express.static("../front/public"))
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(

@@ -10,11 +10,12 @@ import {
 } from "./root/model"
 
 export function Navbar() {
-  const { user } = useContext(LoggedUserContext)
+  const { user, setUser } = useContext(LoggedUserContext)
   const navigate = useNavigate()
 
   const handleLogout = () => {
     window.localStorage.removeItem(LOCAL_STORAGE_LOGGED_USER)
+    setUser(undefined)
     navigate("/")
   }
 

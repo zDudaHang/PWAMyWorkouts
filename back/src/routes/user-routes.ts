@@ -12,10 +12,12 @@ import { QueryResult, DatabaseError } from "pg"
 import {
   CreateUserQueryResult,
   FeedQueryResult,
+  FollowersQueryResult,
   LoginQueryResultModel,
 } from "./model"
 import { constants } from "http2"
 import { KEY_ALREADY_EXISTS } from "../database/model"
+import webpush from "web-push"
 
 const user_router = Router()
 
@@ -74,8 +76,29 @@ user_router.post("/createWorkout", (req, res) => {
         "INSERT INTO workouts (creator_id, title, description) VALUES ($1, $2, $3)",
         [creatorId, title, description]
       )
-      .then((value: QueryResult<CreateUserQueryResult>) => {
-        if (value.rowCount === 1) res.sendStatus(constants.HTTP_STATUS_OK)
+      .then(async (value: QueryResult) => {
+        if (value.rowCount === 1) {
+          const followersSubscriptions: QueryResult<FollowersQueryResult> =
+            await client.query(
+              "SELECT s2.endpoint, s2.sub_public_key, s2.sub_private_key, u2.username" +
+                " FROM subscriptions s2 INNER JOIN followers f2 ON s2.sub_user_id = f2.follower_user_id" +
+                " INNER JOIN users u2 ON u2.id = f2.follower_user_id " +
+                " WHERE f2.followed_user_id = $1",
+              [creatorId]
+            )
+          followersSubscriptions.rows.forEach(
+            ({ endpoint, sub_private_key, sub_public_key, username }) => {
+              webpush.sendNotification(
+                {
+                  endpoint,
+                  keys: { auth: sub_private_key, p256dh: sub_public_key },
+                },
+                JSON.stringify({ title, description, username })
+              )
+            }
+          )
+          res.sendStatus(constants.HTTP_STATUS_OK)
+        }
       })
   }
 })
@@ -90,7 +113,7 @@ user_router.get("/feed", (_, res) => {
         id: workout.id,
         title: workout.title,
         description: workout.description,
-        creator: { id: workout.creatorId, username: workout.username },
+        creator: { id: workout.creator_id, username: workout.username },
       }))
       res.json(feed)
     })
@@ -105,7 +128,15 @@ user_router.put("/follow/:followed_user_id/:follower_user_id", (req, res) => {
         "INSERT INTO followers (followed_user_id, follower_user_id) VALUES ($1, $2)",
         [followed_user_id, follower_user_id]
       )
-      .then((value) => console.log("Sucesso!", value))
+      .then(() => res.sendStatus(constants.HTTP_STATUS_OK))
+      .catch((reason: DatabaseError) => {
+        if (reason.code === KEY_ALREADY_EXISTS) {
+          console.log(
+            `[server] The user #${follower_user_id} is already following user #${followed_user_id}`
+          )
+          res.sendStatus(constants.HTTP_STATUS_UNAUTHORIZED)
+        }
+      })
   }
 })
 

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { VFlow } from "bold-ui"
 import { PublicationView } from "./PublicationView"
 import { CreatorModel, WorkoutModel } from "../../../../model/model"
+import { LoggedUserContext } from "../context/LoggedUserContext"
 
 export function Feed() {
   const [feed, setFeed] = useState<WorkoutModel[]>()
   const [following, setFollowing] = useState<CreatorModel[]>([])
+  const { user } = useContext(LoggedUserContext)
 
   const addNewFollowing = (creator: CreatorModel) => {
     if (!following.includes(creator)) {
@@ -23,14 +25,16 @@ export function Feed() {
 
   return (
     <VFlow>
-      {feed?.map((workout, index) => (
-        <PublicationView
-          key={index}
-          workout={workout}
-          addNewFollowing={addNewFollowing}
-          isFollowing={following.includes(workout.creator)}
-        />
-      ))}
+      {feed
+        ?.filter((workout) => workout.creator.id !== user?.id)
+        .map((workout, index) => (
+          <PublicationView
+            key={index}
+            workout={workout}
+            addNewFollowing={addNewFollowing}
+            isFollowing={following.includes(workout.creator)}
+          />
+        ))}
     </VFlow>
   )
 }

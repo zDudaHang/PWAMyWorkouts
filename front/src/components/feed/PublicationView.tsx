@@ -24,13 +24,15 @@ export function PublicationView(props: PublicationViewProps) {
   }
 
   const handleFollowClick = () => {
-    const request1Options = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+    if (user) {
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      }
+      fetch(`api/follow/${workout.creator.id}/${user.id}`, requestOptions)
+      addNewFollowing(workout.creator)
+      verifyNotificationPermission(workout.creator.username, user.id)
     }
-    fetch(`api/follow/${workout.creator.id}/${user?.id}`, request1Options)
-    addNewFollowing(workout.creator)
-    verifyNotificationPermission(workout.creator.username)
   }
 
   return (

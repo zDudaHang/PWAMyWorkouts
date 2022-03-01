@@ -1,15 +1,18 @@
 const CACHE_NAME = "MY_WORKOUT_PWA_APP"
 
+const IMAGES = [
+  "/images/weight128.png",
+  "/images/weight256.png",
+  "/images/weight512.png",
+]
+
 const FILES_TO_CACHE = [
   "/",
   "/index.html",
-  "/index.css",
   "/manifest.json",
-  "/App.tsx",
   "/favicon.ico",
   "/static/js/bundle.js",
-  "/logo192.png",
-  "/logo512.png",
+  ...IMAGES,
 ]
 
 this.addEventListener("install", (event) => {
@@ -32,23 +35,36 @@ this.addEventListener("fetch", (event) => {
 })
 
 this.addEventListener("push", function (e) {
-  console.log(e)
+  var body
+
+  if (e.data) {
+    body = e.data.text()
+  } else {
+    body = "Push message no payload"
+  }
+
+  const { title, description, usename } = JSON.parse(body)
+
+  console.log(title, description, usename)
+
   var options = {
-    body: "This notification was generated from a push!",
-    icon: "images/example.png",
+    body: body,
+    icon: "images/weight128.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: "2",
+      primaryKey: "1",
     },
     actions: [
       {
-        action: "explore",
-        title: "Explore this new world",
+        action: "Save it",
+        title: "Save it",
         icon: "images/checkmark.png",
       },
       { action: "close", title: "Close", icon: "images/xmark.png" },
     ],
   }
-  e.waitUntil(this.registration.showNotification("Hello world!", options))
+  e.waitUntil(
+    this.registration.showNotification("New workout arrived!", options)
+  )
 })

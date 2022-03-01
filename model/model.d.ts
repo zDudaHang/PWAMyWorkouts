@@ -29,3 +29,16 @@ export interface CreateWorkoutRequestModel {
   description: string
   creatorId: number
 }
+
+export interface PushSubscriptionModel {
+  endpoint: string
+  keys: {
+    p256dh: ArrayBuffer | null
+    auth: ArrayBuffer | null
+  }
+}
+
+export interface SubscriptionRequestModel {
+  subscription: PushSubscriptionModel
+  userId: number
+}

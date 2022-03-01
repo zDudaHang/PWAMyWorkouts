@@ -1,4 +1,9 @@
-export function verifyNotificationPermission(creatorName: string) {
+import { isNil } from "lodash"
+
+export async function verifyNotificationPermission(
+  creatorName: string,
+  userId: number
+) {
   if (!window.Notification) {
     alert("O navegador não tem suporte para notificações")
   } else {
@@ -20,34 +25,41 @@ export function verifyNotificationPermission(creatorName: string) {
       )
     } else {
       alert(`Sucesso ! Agora você está seguindo o ${creatorName}`)
-      subscribeUser()
+      await subscribeUser(userId)
     }
   }
 }
 
-export function subscribeUser() {
+export function subscribeUser(userId: number) {
   if (navigator.serviceWorker) {
-    navigator.serviceWorker.ready.then((reg) => {
+    navigator.serviceWorker.ready.then(async (reg) => {
       if (process.env.REACT_APP_VAPID_PUBLIC_KEY) {
-        reg.pushManager
-          .subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(
-              process.env.REACT_APP_VAPID_PUBLIC_KEY
-            ),
-          })
-          .then(
-            (pushSubscription) => {
-              fetch("push/subscribe", {
-                method: "POST",
-                body: JSON.stringify(pushSubscription),
-                headers: {
-                  "content-type": "application/json",
-                },
-              }).then((response) => console.log(response))
-            },
-            (error) => console.log(error)
-          )
+        const subscription = await reg.pushManager.getSubscription()
+        console.log(subscription)
+        if (isNil(subscription))
+          reg.pushManager
+            .subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: urlBase64ToUint8Array(
+                process.env.REACT_APP_VAPID_PUBLIC_KEY
+              ),
+            })
+            .then(
+              (pushSubscription) => {
+                const subscriptionModel = {
+                  subscription: pushSubscription,
+                  userId,
+                }
+                fetch("push/subscribe", {
+                  method: "POST",
+                  body: JSON.stringify(subscriptionModel),
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                }).then((response) => console.log(response))
+              },
+              (error) => console.log(error)
+            )
       }
     })
   }
