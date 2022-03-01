@@ -19,3 +19,12 @@ export interface CreatorModel {
   id?: number
   name: string
 }
+
+export interface UserModel {
+  id: number
+  username: string
+}
+
+export interface CreateUserResponseModel {
+  id: number
+}

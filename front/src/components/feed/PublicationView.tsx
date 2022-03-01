@@ -1,9 +1,10 @@
 import { Button, Heading, Icon, VFlow } from "bold-ui"
-import React from "react"
+import React, { useContext } from "react"
 import { db } from "../../db"
 import { CreatorModel, PublicationModel } from "../../../../model/model"
 import { verifyNotificationPermission } from "../../util"
 import { WorkoutView } from "../WorkoutView"
+import { LoggedUserContext } from "../context/LoggedUserContext"
 
 interface PublicationViewProps {
   publication: PublicationModel
@@ -18,6 +19,8 @@ export function PublicationView(props: PublicationViewProps) {
     addNewFollowing,
   } = props
 
+  const { user } = useContext(LoggedUserContext)
+
   const handleClick = () => {
     db.savedWorkouts.add({
       ...workout,
@@ -29,7 +32,7 @@ export function PublicationView(props: PublicationViewProps) {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
     }
-    fetch(`api/follow/${workout.creator.id}`, request1Options)
+    fetch(`api/follow/${workout.creator.id}/${user?.id}`, request1Options)
     addNewFollowing(workout.creator)
     verifyNotificationPermission(workout.creator.name)
   }

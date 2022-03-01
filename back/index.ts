@@ -12,7 +12,7 @@ const PORT = 8000
 
 configEnv()
 
-configureDataBase()
+export const client = configureDataBase()
 
 app.use(json())
 

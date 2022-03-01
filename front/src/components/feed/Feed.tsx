@@ -3,7 +3,7 @@ import { VFlow } from "bold-ui"
 import { PublicationView } from "./PublicationView"
 import { CreatorModel, FeedModel } from "../../../../model/model"
 
-export function Home() {
+export function Feed() {
   const [feed, setFeed] = useState<FeedModel>()
   const [following, setFollowing] = useState<CreatorModel[]>([])
 

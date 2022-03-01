@@ -1,4 +1,4 @@
-import { Client, QueryResult } from "pg"
+import { Client } from "pg"
 import { readFileSync } from "fs"
 import { DUPLICATED_TABLE_CODE_ERROR } from "./model"
 
