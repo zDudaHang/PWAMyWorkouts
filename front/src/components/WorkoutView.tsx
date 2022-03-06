@@ -16,7 +16,7 @@ export function WorkoutView(props: WorkoutProps) {
       <Heading level={2} style={{ marginBottom: "-0.5rem" }}>
         {title}
       </Heading>
-      <Text>Publicado por {creator.username}</Text>
+      <Text>Published by {creator.username}</Text>
       <Text style={{ whiteSpace: "pre-wrap" }}>{description}</Text>
     </VFlow>
   )

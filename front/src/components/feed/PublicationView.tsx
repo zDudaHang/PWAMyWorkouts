@@ -1,7 +1,7 @@
 import { Button, Icon, VFlow } from "bold-ui"
 import React, { useContext } from "react"
 import { db } from "../../db"
-import { CreatorModel, WorkoutModel } from "../../../../model/model"
+import { WorkoutModel } from "../../../../model/model"
 import { verifyNotificationPermission } from "../../util"
 import { WorkoutView } from "../WorkoutView"
 import { LoggedUserContext } from "../context/LoggedUserContext"
@@ -9,11 +9,11 @@ import { LoggedUserContext } from "../context/LoggedUserContext"
 interface PublicationViewProps {
   workout: WorkoutModel
   isFollowing: boolean
-  addNewFollowing: (creator: CreatorModel) => void
+  updateFollowingIds: (id: number) => void
 }
 
 export function PublicationView(props: PublicationViewProps) {
-  const { workout, isFollowing, addNewFollowing } = props
+  const { workout, isFollowing, updateFollowingIds } = props
 
   const { user } = useContext(LoggedUserContext)
 
@@ -26,11 +26,12 @@ export function PublicationView(props: PublicationViewProps) {
   const handleFollowClick = () => {
     if (user) {
       const requestOptions = {
-        method: "PUT",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
       }
-      fetch(`api/follow/${workout.creator.id}/${user.id}`, requestOptions)
-      addNewFollowing(workout.creator)
+      const apiURL = isFollowing ? "unfollow" : "follow"
+      fetch(`api/${apiURL}/${workout.creator.id}/${user.id}`, requestOptions)
+      updateFollowingIds(workout.creator.id)
       verifyNotificationPermission(workout.creator.username, user.id)
     }
   }
@@ -47,7 +48,7 @@ export function PublicationView(props: PublicationViewProps) {
           icon={isFollowing ? "bellFilled" : "bellOutline"}
           style={{ marginRight: "0.5rem" }}
         />
-        Follow {workout.creator.username}
+        {isFollowing ? "Unfollow " : "Follow"} {workout.creator.username}
       </Button>
     </VFlow>
   )

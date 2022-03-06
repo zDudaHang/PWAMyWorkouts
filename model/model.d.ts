@@ -6,7 +6,7 @@ export interface WorkoutModel {
 }
 
 export interface CreatorModel {
-  id?: number
+  id: number
   username: string
 }
 
@@ -22,6 +22,10 @@ export interface AuthenticationResponseModel {
 export interface LoginRequestModel {
   username: string
   password: string
+}
+
+export interface FeedRequestModel {
+  userId: number
 }
 
 export interface CreateWorkoutRequestModel {

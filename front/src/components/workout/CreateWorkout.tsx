@@ -1,5 +1,4 @@
 import { Button, Cell, Grid, Heading, VFlow } from "bold-ui"
-import { FormApi } from "final-form"
 import { Field, Form, FormRenderProps } from "react-final-form"
 import { TextAreaAdapter, TextFieldAdapter } from "../Adapters"
 import React, { useContext } from "react"
@@ -18,10 +17,7 @@ export function CreateWorkout() {
   const { user } = useContext(LoggedUserContext)
   const navigate = useNavigate()
 
-  const handleSubmit = (
-    values: WorkoutFormModel,
-    formApi: FormApi<WorkoutFormModel>
-  ) => {
+  const handleSubmit = (values: WorkoutFormModel) => {
     if (!isEmpty(values)) {
       const requestOptions = {
         method: "POST",

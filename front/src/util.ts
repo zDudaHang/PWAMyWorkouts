@@ -1,36 +1,33 @@
-export async function verifyNotificationPermission(
+export function verifyNotificationPermission(
   creatorName: string,
   userId: number
 ) {
   if (!window.Notification) {
-    alert("O navegador não tem suporte para notificações")
+    alert("The browser does not support notifications")
   } else {
     const permission = Notification.permission
     if (permission === "default") {
       Notification.requestPermission().then((status) => {
         if (status === "denied") {
           alert(
-            "Você negou a permissão de notificações. Por favor, vá nas configurações do seu navegador ou celular e habilite as notificações"
+            "You have denied permission for notifications. Please go to your browser or mobile settings and enable notifications"
           )
           return
-        } else {
-          alert(`Sucesso ! Agora você está seguindo o ${creatorName}`)
         }
       })
     } else if (permission === "denied") {
       alert(
-        "Você negou a permissão de notificações. Por favor, vá nas configurações do seu navegador ou celular e habilite as notificações"
+        "You have denied permission for notifications. Please go to your browser or mobile settings and enable notifications"
       )
     } else {
-      alert(`Sucesso ! Agora você está seguindo o ${creatorName}`)
-      await subscribeUser(userId)
+      subscribeUser(userId)
     }
   }
 }
 
 export function subscribeUser(userId: number) {
   if (navigator.serviceWorker) {
-    navigator.serviceWorker.ready.then(async (reg) => {
+    navigator.serviceWorker.ready.then((reg) => {
       if (process.env.REACT_APP_VAPID_PUBLIC_KEY) {
         reg.pushManager
           .subscribe({

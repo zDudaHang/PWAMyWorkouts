@@ -21,3 +21,7 @@ export interface FollowersQueryResult {
   sub_private_key: string
   username: string
 }
+
+export interface FollowingQueryResult {
+  id: number
+}

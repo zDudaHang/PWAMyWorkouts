@@ -5,6 +5,7 @@ import { isEmpty, isEqual } from "lodash"
 import {
   AuthenticationResponseModel,
   CreateWorkoutRequestModel,
+  FeedRequestModel,
   LoginRequestModel,
   WorkoutModel,
 } from "../../../model/model"
@@ -13,6 +14,7 @@ import {
   CreateUserQueryResult,
   FeedQueryResult,
   FollowersQueryResult,
+  FollowingQueryResult,
   LoginQueryResultModel,
 } from "./model"
 import { constants } from "http2"
@@ -104,41 +106,88 @@ user_router.post("/createWorkout", (req, res) => {
   }
 })
 
-user_router.get("/feed", (_, res) => {
-  client
-    .query(
-      "SELECT w.*, u.username FROM workouts w INNER JOIN users u ON w.creator_id = u.id LIMIT 10"
-    )
-    .then((value: QueryResult<FeedQueryResult>) => {
-      const feed: WorkoutModel[] = value.rows.map((workout) => ({
-        id: workout.id,
-        title: workout.title,
-        description: workout.description,
-        creator: { id: workout.creator_id, username: workout.username },
-      }))
-      res.json(feed)
-    })
-})
-
-user_router.put("/follow/:followed_user_id/:follower_user_id", (req, res) => {
-  const followed_user_id = Number(req.params.followed_user_id)
-  const follower_user_id = Number(req.params.follower_user_id)
-  if (followed_user_id && follower_user_id) {
+user_router.get("/feed/:userId", (req, res) => {
+  const userId = req.params.userId
+  if (userId) {
     client
       .query(
-        "INSERT INTO followers (followed_user_id, follower_user_id) VALUES ($1, $2)",
-        [followed_user_id, follower_user_id]
+        "SELECT w.*, u.username FROM workouts w INNER JOIN users u ON w.creator_id = u.id WHERE w.creator_id <> $1 LIMIT 10",
+        [userId]
       )
-      .then(() => res.sendStatus(constants.HTTP_STATUS_OK))
-      .catch((reason: DatabaseError) => {
-        if (reason.code === KEY_ALREADY_EXISTS) {
-          console.log(
-            `[server] The user #${follower_user_id} is already following user #${followed_user_id}`
-          )
-          res.sendStatus(constants.HTTP_STATUS_UNAUTHORIZED)
-        }
+      .then((value: QueryResult<FeedQueryResult>) => {
+        const feed: WorkoutModel[] = value.rows.map((workout) => ({
+          id: workout.id,
+          title: workout.title,
+          description: workout.description,
+          creator: { id: workout.creator_id, username: workout.username },
+        }))
+        res.json(feed)
       })
   }
 })
+
+user_router.get("/following/:userId", (req, res) => {
+  const userId = req.params.userId
+  if (userId) {
+    client
+      .query(
+        "SELECT u.id from followers f " +
+          "inner join users u on u.id = f.followed_user_id " +
+          "where f.follower_user_id  = $1",
+        [userId]
+      )
+      .then((value: QueryResult<FollowingQueryResult>) => {
+        const followingIds: number[] = value.rows.map(
+          (followingQueryResult) => followingQueryResult.id
+        )
+        res.json(followingIds)
+      })
+  }
+})
+
+user_router.post(
+  "/follow/:user_id_will_be_followed/:follower_user_id",
+  (req, res) => {
+    const user_id_will_be_followed = Number(req.params.user_id_will_be_followed)
+    const follower_user_id = Number(req.params.follower_user_id)
+    if (user_id_will_be_followed && follower_user_id) {
+      client
+        .query(
+          "INSERT INTO followers (followed_user_id, follower_user_id) VALUES ($1, $2)",
+          [user_id_will_be_followed, follower_user_id]
+        )
+        .then(() => res.sendStatus(constants.HTTP_STATUS_OK))
+        .catch((reason: DatabaseError) => {
+          if (reason.code === KEY_ALREADY_EXISTS) {
+            console.log(
+              `[server] The user #${follower_user_id} is already following user #${user_id_will_be_followed}`
+            )
+            res.sendStatus(constants.HTTP_STATUS_UNAUTHORIZED)
+          }
+        })
+    }
+  }
+)
+
+user_router.post(
+  "/unfollow/:user_id_will_be_unfollowed/:follower_user_id",
+  (req, res) => {
+    const user_id_will_be_unfollowed = Number(
+      req.params.user_id_will_be_unfollowed
+    )
+    const follower_user_id = Number(req.params.follower_user_id)
+    if (user_id_will_be_unfollowed && follower_user_id) {
+      client
+        .query(
+          "DELETE FROM followers f WHERE f.followed_user_id = $1 AND f.follower_user_id = $2",
+          [user_id_will_be_unfollowed, follower_user_id]
+        )
+        .then(() => res.sendStatus(constants.HTTP_STATUS_OK))
+        .catch((reason: DatabaseError) => {
+          console.log(reason)
+        })
+    }
+  }
+)
 
 export default user_router

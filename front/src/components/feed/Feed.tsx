@@ -1,40 +1,49 @@
 import React, { useContext, useEffect, useState } from "react"
 import { VFlow } from "bold-ui"
 import { PublicationView } from "./PublicationView"
-import { CreatorModel, WorkoutModel } from "../../../../model/model"
+import { WorkoutModel } from "../../../../model/model"
 import { LoggedUserContext } from "../context/LoggedUserContext"
 
 export function Feed() {
   const [feed, setFeed] = useState<WorkoutModel[]>()
-  const [following, setFollowing] = useState<CreatorModel[]>([])
+  const [followingUserIds, setFollowingUserIds] = useState<number[]>([])
   const { user } = useContext(LoggedUserContext)
 
-  const addNewFollowing = (creator: CreatorModel) => {
-    if (!following.includes(creator)) {
-      setFollowing([...following, creator])
+  useEffect(() => {
+    if (user) {
+      fetch(`api/feed/${user?.id}`).then((response) => {
+        response.json().then((feed: WorkoutModel[]) => {
+          setFeed(feed)
+        })
+      })
+      fetch(`api/following/${user?.id}`).then((response) => {
+        response.json().then((following: number[]) => {
+          setFollowingUserIds([...following])
+        })
+      })
+    }
+  }, [user])
+
+  const updateFollowingIds = (id: number) => {
+    if (followingUserIds.includes(id)) {
+      setFollowingUserIds([
+        ...followingUserIds.filter((userId) => userId !== id),
+      ])
+    } else {
+      setFollowingUserIds([...followingUserIds, id])
     }
   }
 
-  useEffect(() => {
-    fetch("api/feed").then((response) => {
-      response.json().then((feed: WorkoutModel[]) => {
-        setFeed(feed)
-      })
-    })
-  }, [])
-
   return (
     <VFlow>
-      {feed
-        ?.filter((workout) => workout.creator.id !== user?.id)
-        .map((workout, index) => (
-          <PublicationView
-            key={index}
-            workout={workout}
-            addNewFollowing={addNewFollowing}
-            isFollowing={following.includes(workout.creator)}
-          />
-        ))}
+      {feed?.map((workout, index) => (
+        <PublicationView
+          key={index}
+          workout={workout}
+          updateFollowingIds={updateFollowingIds}
+          isFollowing={followingUserIds.includes(workout.creator.id)}
+        />
+      ))}
     </VFlow>
   )
 }
