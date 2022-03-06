@@ -6,6 +6,8 @@ import React, { useContext } from "react"
 import { LoggedUserContext } from "../context/LoggedUserContext"
 import { isEmpty } from "lodash"
 import { CreateWorkoutRequestModel } from "../../../../model/model"
+import { useNavigate } from "react-router-dom"
+import { FEED_URL } from "../root/model"
 
 interface WorkoutFormModel {
   title: string
@@ -14,6 +16,7 @@ interface WorkoutFormModel {
 
 export function CreateWorkout() {
   const { user } = useContext(LoggedUserContext)
+  const navigate = useNavigate()
 
   const handleSubmit = (
     values: WorkoutFormModel,
@@ -29,7 +32,8 @@ export function CreateWorkout() {
         headers: { "Content-Type": "application/json" },
       }
       fetch("api/createWorkout", requestOptions).then((response) => {
-        console.log(response)
+        alert("Workout created successfully")
+        navigate(FEED_URL)
       })
     }
   }

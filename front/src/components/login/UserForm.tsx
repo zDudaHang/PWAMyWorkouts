@@ -16,6 +16,7 @@ import {
 import { isEmpty } from "lodash"
 import { FormApi } from "final-form"
 import { StatusCodes } from "http-status-codes"
+import { ServerStatusCode } from "../../constants"
 
 interface UserFormProps {
   fetchUrl: string
@@ -33,6 +34,7 @@ export function UserForm(props: UserFormProps) {
     formApi: FormApi<LoginRequestModel>
   ) => {
     if (!isEmpty(values)) {
+      const { username } = values
       const requestOptions = {
         method: "POST",
         body: JSON.stringify(values),
@@ -41,15 +43,15 @@ export function UserForm(props: UserFormProps) {
       fetch(fetchUrl, requestOptions).then((response) => {
         if (response.status === StatusCodes.OK)
           response.json().then((response: AuthenticationResponseModel) => {
-            setUser({ id: response.id, username: values.username })
+            setUser({ id: response.id, username })
             window.localStorage.setItem(
               LOCAL_STORAGE_LOGGED_USER,
-              JSON.stringify({ id: response.id, username: values.username })
+              JSON.stringify({ id: response.id, username })
             )
             navigate(FEED_URL)
           })
-        else if (response.status === StatusCodes.UNAUTHORIZED) {
-          alert("Ops ! Something is wrong, try again !")
+        else if (response.status === ServerStatusCode.KEY_ALREADY_EXISTS) {
+          alert(`Ops ! The username ${username} is already used`)
           setTimeout(formApi.restart)
         }
       })

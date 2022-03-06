@@ -6,7 +6,6 @@ import push_router from "./src/routes/push-routes"
 import { config as configEnv } from "dotenv"
 import { json } from "body-parser"
 import { configureDataBase } from "./src/database/config"
-import path from "path"
 
 const app = express()
 const PORT = 8000

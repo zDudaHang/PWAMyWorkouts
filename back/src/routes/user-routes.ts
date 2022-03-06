@@ -18,6 +18,7 @@ import {
 import { constants } from "http2"
 import { KEY_ALREADY_EXISTS } from "../database/model"
 import webpush from "web-push"
+import { ServerStatusCode } from "../constants"
 
 const user_router = Router()
 
@@ -61,7 +62,7 @@ user_router.post("/createUser", (req, res) => {
       .catch((reason: DatabaseError) => {
         if (reason.code === KEY_ALREADY_EXISTS) {
           console.log(`[server] The username ${username} already exists`)
-          res.sendStatus(constants.HTTP_STATUS_UNAUTHORIZED)
+          res.sendStatus(ServerStatusCode.KEY_ALREADY_EXISTS)
         }
       })
   }

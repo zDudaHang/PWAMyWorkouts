@@ -3,6 +3,7 @@ import {
   CREATE_USER_URL,
   CREATE_WORKOUT_URL,
   FEED_URL,
+  LOGIN_URL,
   MY_SAVED_WORKOUTS_URL,
 } from "./model"
 import React from "react"
@@ -19,7 +20,7 @@ export function RootView() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path={LOGIN_URL} element={<Login />} />
         <Route path={CREATE_USER_URL} element={<CreateUser />} />
         <Route
           path={FEED_URL}

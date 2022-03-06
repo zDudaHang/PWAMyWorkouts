@@ -1,5 +1,3 @@
-import { isNil } from "lodash"
-
 export async function verifyNotificationPermission(
   creatorName: string,
   userId: number
@@ -34,32 +32,29 @@ export function subscribeUser(userId: number) {
   if (navigator.serviceWorker) {
     navigator.serviceWorker.ready.then(async (reg) => {
       if (process.env.REACT_APP_VAPID_PUBLIC_KEY) {
-        const subscription = await reg.pushManager.getSubscription()
-        console.log(subscription)
-        if (isNil(subscription))
-          reg.pushManager
-            .subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: urlBase64ToUint8Array(
-                process.env.REACT_APP_VAPID_PUBLIC_KEY
-              ),
-            })
-            .then(
-              (pushSubscription) => {
-                const subscriptionModel = {
-                  subscription: pushSubscription,
-                  userId,
-                }
-                fetch("push/subscribe", {
-                  method: "POST",
-                  body: JSON.stringify(subscriptionModel),
-                  headers: {
-                    "content-type": "application/json",
-                  },
-                }).then((response) => console.log(response))
-              },
-              (error) => console.log(error)
-            )
+        reg.pushManager
+          .subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(
+              process.env.REACT_APP_VAPID_PUBLIC_KEY
+            ),
+          })
+          .then(
+            (pushSubscription) => {
+              const subscriptionModel = {
+                subscription: pushSubscription,
+                userId,
+              }
+              fetch("push/subscribe", {
+                method: "POST",
+                body: JSON.stringify(subscriptionModel),
+                headers: {
+                  "content-type": "application/json",
+                },
+              }).then((response) => console.log(response))
+            },
+            (error) => console.log(error)
+          )
       }
     })
   }

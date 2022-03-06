@@ -6,6 +6,7 @@ import {
   CREATE_WORKOUT_URL,
   FEED_URL,
   LOCAL_STORAGE_LOGGED_USER,
+  LOGIN_URL,
   MY_SAVED_WORKOUTS_URL,
 } from "./root/model"
 
@@ -16,7 +17,7 @@ export function Navbar() {
   const handleLogout = () => {
     window.localStorage.removeItem(LOCAL_STORAGE_LOGGED_USER)
     setUser(undefined)
-    navigate("/")
+    navigate(LOGIN_URL)
   }
 
   return (
