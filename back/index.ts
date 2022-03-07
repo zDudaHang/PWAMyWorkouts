@@ -15,16 +15,7 @@ configEnv()
 export const client = configureDataBase()
 
 app.use(json())
-
-if (process.env.APP_URL) {
-  const ALLOWED_ORIGINS = [process.env.APP_URL]
-
-  const options: cors.CorsOptions = {
-    origin: ALLOWED_ORIGINS,
-  }
-
-  app.use(cors(options))
-}
+app.use(cors())
 
 app.use(express.static("../front/public"))
 
@@ -42,5 +33,5 @@ app.use("/api", user_router)
 console.log("[server]: The api routes were successfully added")
 
 app.listen(PORT, () => {
-  console.log(`[server]: Server is running at https://localhost:${PORT}`)
+  console.log(`[server]: Server is running at ${PORT}`)
 })
