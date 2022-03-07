@@ -15,7 +15,7 @@
     "web-push": "^3.4.5"
   },
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node index.js",
     "devStart": "nodemon index.js"
   },
   "devDependencies": {
