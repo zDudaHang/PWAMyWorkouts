@@ -29,7 +29,10 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   console.log("[server]: The push route was successfully added")
 }
 
-app.get("/", (_, res) => res.send("Heroku test"))
+app.get("/", (_, res) => {
+  console.log("GET")
+  res.send("Heroku test")
+})
 
 app.use("/api", user_router)
 console.log("[server]: The api routes were successfully added")
