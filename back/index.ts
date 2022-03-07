@@ -8,7 +8,7 @@ import { json } from "body-parser"
 import { configureDataBase } from "./src/database/config"
 
 const app = express()
-const PORT = 8000
+const PORT = process.env.PORT || 8000
 
 configEnv()
 

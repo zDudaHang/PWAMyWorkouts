@@ -5,13 +5,7 @@ import { DUPLICATED_TABLE_CODE_ERROR } from "./model"
 export const configureDataBase = () => {
   console.log(console.log("[server] Configurating database..."))
 
-  const client = new Client({
-    user: process.env.DATABASE_USER,
-    host: process.env.DATABASE_HOST,
-    database: process.env.DATABASE_NAME,
-    password: process.env.DATABASE_USER_PASSWORD,
-    port: Number(process.env.DATABASE_PORT),
-  })
+  const client = new Client(process.env.DATABASE_URL)
 
   client.connect().then(() => {
     console.log("[server] Database is online now! Creating tables...")
