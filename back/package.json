@@ -15,7 +15,8 @@
     "web-push": "^3.4.5"
   },
   "scripts": {
-    "start": "nodemon index.ts"
+    "start": "node index.ts",
+    "devStart": "nodemon index.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

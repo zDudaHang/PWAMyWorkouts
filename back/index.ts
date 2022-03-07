@@ -16,13 +16,15 @@ export const client = configureDataBase()
 
 app.use(json())
 
-const ALLOWED_ORIGINS = ["http://localhost:3000"]
+if (process.env.APP_URL) {
+  const ALLOWED_ORIGINS = [process.env.APP_URL]
 
-const options: cors.CorsOptions = {
-  origin: ALLOWED_ORIGINS,
+  const options: cors.CorsOptions = {
+    origin: ALLOWED_ORIGINS,
+  }
+
+  app.use(cors(options))
 }
-
-app.use(cors(options))
 
 app.use(express.static("../front/public"))
 
