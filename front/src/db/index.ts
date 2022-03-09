@@ -3,11 +3,13 @@ import { WorkoutModel } from "../../../model/model"
 
 export class MyWorkoutDexie extends Dexie {
   savedWorkouts!: Table<WorkoutModel>
+  feed!: Table<WorkoutModel>
 
   constructor() {
     super("MyWorkoutIndexedDatabase")
     this.version(1).stores({
-      savedWorkouts: "++id, name, description", // Primary key and indexed props
+      savedWorkouts: "++id, name, description",
+      feed: "++id, name, description", // Primary key and indexed props
     })
   }
 }

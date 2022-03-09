@@ -3,6 +3,7 @@ import { VFlow } from "bold-ui"
 import { PublicationView } from "./PublicationView"
 import { WorkoutModel } from "../../../../model/model"
 import { LoggedUserContext } from "../context/LoggedUserContext"
+import { db } from "../../db"
 
 export function Feed() {
   const [feed, setFeed] = useState<WorkoutModel[]>()
@@ -11,11 +12,21 @@ export function Feed() {
 
   useEffect(() => {
     if (user) {
-      fetch(`api/feed/${user?.id}`).then((response) => {
-        response.json().then((feed: WorkoutModel[]) => {
+      fetch(`api/feed/${user?.id}`)
+        .then((response) => {
+          response.json().then((feed: WorkoutModel[]) => {
+            setFeed(feed)
+            feed.forEach((workout) =>
+              db.feed.add({
+                ...workout,
+              })
+            )
+          })
+        })
+        .catch(async () => {
+          const feed = await db.feed.toArray()
           setFeed(feed)
         })
-      })
       fetch(`api/following/${user?.id}`).then((response) => {
         response.json().then((following: number[]) => {
           setFollowingUserIds([...following])

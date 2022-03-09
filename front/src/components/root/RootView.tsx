@@ -14,14 +14,28 @@ import { CreateUser } from "../login/CreateUser"
 import { PrivateRoute } from "./PrivateRoute"
 import { Navbar } from "../Navbar"
 import { CreateWorkout } from "../workout/CreateWorkout"
+import { useOnlineStatus } from "../context/useOnlineStatus"
 
 export function RootView() {
+  const isOnline = useOnlineStatus()
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path={LOGIN_URL} element={<Login />} />
-        <Route path={CREATE_USER_URL} element={<CreateUser />} />
+        {isOnline && (
+          <>
+            <Route
+              path={CREATE_WORKOUT_URL}
+              element={
+                <PrivateRoute>
+                  <CreateWorkout />
+                </PrivateRoute>
+              }
+            />
+            <Route path={LOGIN_URL} element={<Login />} />
+            <Route path={CREATE_USER_URL} element={<CreateUser />} />
+          </>
+        )}
         <Route
           path={FEED_URL}
           element={
@@ -35,14 +49,6 @@ export function RootView() {
           element={
             <PrivateRoute>
               <SavedWorkoutsView />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={CREATE_WORKOUT_URL}
-          element={
-            <PrivateRoute>
-              <CreateWorkout />
             </PrivateRoute>
           }
         />

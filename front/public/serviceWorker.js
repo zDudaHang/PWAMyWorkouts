@@ -6,13 +6,15 @@ const IMAGES = [
   "/images/weight512.png",
 ]
 
+const OFFLINE_URLS = ["/"]
+
 const FILES_TO_CACHE = [
-  "/",
   "/index.html",
   "/manifest.json",
   "/favicon.ico",
   "/static/js/bundle.js",
   ...IMAGES,
+  ...OFFLINE_URLS,
 ]
 
 this.addEventListener("install", (event) => {
@@ -25,10 +27,10 @@ this.addEventListener("install", (event) => {
 
 this.addEventListener("fetch", (event) => {
   if (!navigator.onLine) {
-    console.log("[Navegador] OFF")
+    console.log("FETCH on off-line")
     event.respondWith(
       caches.match(event.request).then((response) => {
-        if (response) return response
+        return response || fetch(event.request)
       })
     )
   }
@@ -43,28 +45,21 @@ this.addEventListener("push", function (e) {
     body = "Push message no payload"
   }
 
-  const { title, description, usename } = JSON.parse(body)
-
-  console.log(title, description, usename)
+  const { title, usename } = JSON.parse(body)
 
   var options = {
-    body: body,
+    body: title,
     icon: "images/weight128.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
       primaryKey: "1",
     },
-    actions: [
-      {
-        action: "Save it",
-        title: "Save it",
-        icon: "images/checkmark.png",
-      },
-      { action: "close", title: "Close", icon: "images/xmark.png" },
-    ],
   }
   e.waitUntil(
-    this.registration.showNotification("New workout arrived!", options)
+    this.registration.showNotification(
+      `@${usename} created a new workout !`,
+      options
+    )
   )
 })

@@ -18,12 +18,10 @@
     "express": "^4.17.2",
     "lodash": "^4.17.21",
     "pg": "^8.7.3",
-    "web-push": "^3.4.5",
-    "ts-node": "^10.4.0"
+    "web-push": "^3.4.5"
   },
   "scripts": {
-    "start": "ts-node index.ts",
-    "devStart": "nodemon index.js"
+    "start": "nodemon index.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

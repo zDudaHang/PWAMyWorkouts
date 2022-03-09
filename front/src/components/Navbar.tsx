@@ -1,7 +1,8 @@
-import { Button, HFlow, Link, Text } from "bold-ui"
+import { Button, HFlow, Icon, Link, Text } from "bold-ui"
 import React, { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { LoggedUserContext } from "./context/LoggedUserContext"
+import { useOnlineStatus } from "./context/useOnlineStatus"
 import {
   CREATE_WORKOUT_URL,
   FEED_URL,
@@ -12,6 +13,7 @@ import {
 
 export function Navbar() {
   const { user, setUser } = useContext(LoggedUserContext)
+  const isOnline = useOnlineStatus()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -32,11 +34,17 @@ export function Navbar() {
           <Text>Welcome, {user.username}</Text>
           <Link href={FEED_URL}>Feed</Link>
           <Link href={MY_SAVED_WORKOUTS_URL}>My saved workouts</Link>
-          <Link href={CREATE_WORKOUT_URL}>Submit workout</Link>
+          {isOnline && <Link href={CREATE_WORKOUT_URL}>Submit workout</Link>}
           <Button size="small" skin="ghost" onClick={handleLogout}>
             Logout
           </Button>
         </>
+      )}
+      {!isOnline && (
+        <HFlow alignItems="center">
+          <Icon icon="exclamationTriangleFilled" />
+          <Text>You're off-line, some features are disabled now</Text>
+        </HFlow>
       )}
     </HFlow>
   )

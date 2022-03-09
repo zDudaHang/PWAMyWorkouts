@@ -15,7 +15,14 @@ configEnv()
 export const client = configureDataBase()
 
 app.use(json())
-app.use(cors())
+
+const ALLOWED_ORIGINS = ["http://localhost:3000"]
+
+const options: cors.CorsOptions = {
+  origin: ALLOWED_ORIGINS,
+}
+
+app.use(cors(options))
 
 app.use(express.static("../front/public"))
 
@@ -28,11 +35,6 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   app.use("/push", push_router)
   console.log("[server]: The push route was successfully added")
 }
-
-app.get("/", (_, res) => {
-  console.log("GET")
-  res.send("Heroku test")
-})
 
 app.use("/api", user_router)
 console.log("[server]: The api routes were successfully added")
