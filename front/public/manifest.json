@@ -1,6 +1,6 @@
 {
   "short_name": "My workout app",
-  "name": "PWA sample",
+  "name": "PWA PoC",
   "icons": [
     {
       "src": "favicon.ico",

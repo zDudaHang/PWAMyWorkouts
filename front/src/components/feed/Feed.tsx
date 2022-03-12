@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { VFlow } from "bold-ui"
+import { VFlow, Text, Heading } from "bold-ui"
 import { PublicationView } from "./PublicationView"
 import { WorkoutModel } from "../../../../model/model"
 import { LoggedUserContext } from "../context/LoggedUserContext"
@@ -45,16 +45,23 @@ export function Feed() {
     }
   }
 
+  const hasFeed = feed && feed.length > 0
+
   return (
-    <VFlow>
-      {feed?.map((workout, index) => (
-        <PublicationView
-          key={index}
-          workout={workout}
-          updateFollowingIds={updateFollowingIds}
-          isFollowing={followingUserIds.includes(workout.creator.id)}
-        />
-      ))}
+    <VFlow vSpacing={0.5} style={{ marginLeft: "1rem" }}>
+      <Heading level={2}>Feed</Heading>
+      {hasFeed ? (
+        feed?.map((workout, index) => (
+          <PublicationView
+            key={index}
+            workout={workout}
+            updateFollowingIds={updateFollowingIds}
+            isFollowing={followingUserIds.includes(workout.creator.id)}
+          />
+        ))
+      ) : (
+        <Text>There are no workouts to see</Text>
+      )}
     </VFlow>
   )
 }

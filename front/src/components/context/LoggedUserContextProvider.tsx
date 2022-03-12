@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { UserModel } from "../../../../model/model"
-import { LOCAL_STORAGE_LOGGED_USER } from "../root/model"
+import { LOCAL_STORAGE_LOGGED_USER } from "../../constants"
 import { LoggedUserContext } from "./LoggedUserContext"
 
 export function LoggedUserContextProvider({ children }: any) {

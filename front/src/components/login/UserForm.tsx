@@ -8,15 +8,11 @@ import { LoggedUserContext } from "../context/LoggedUserContext"
 import { Field, Form, FormRenderProps } from "react-final-form"
 import { PasswordFieldAdapter, TextFieldAdapter } from "../Adapters"
 import { useNavigate } from "react-router-dom"
-import {
-  CREATE_USER_URL,
-  FEED_URL,
-  LOCAL_STORAGE_LOGGED_USER,
-} from "../root/model"
+import { CREATE_USER_URL, FEED_URL } from "../root/model"
 import { isEmpty } from "lodash"
 import { FormApi } from "final-form"
 import { StatusCodes } from "http-status-codes"
-import { ServerStatusCode } from "../../constants"
+import { LOCAL_STORAGE_LOGGED_USER, ServerStatusCode } from "../../constants"
 
 interface UserFormProps {
   fetchUrl: string

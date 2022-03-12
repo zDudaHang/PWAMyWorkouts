@@ -1,6 +1,7 @@
 import React from "react"
 import { Navigate } from "react-router-dom"
-import { LOCAL_STORAGE_LOGGED_USER, LOGIN_URL } from "./model"
+import { LOCAL_STORAGE_LOGGED_USER } from "../../constants"
+import { LOGIN_URL } from "./model"
 
 export function PrivateRoute({ children }: any) {
   const user = window.localStorage.getItem(LOCAL_STORAGE_LOGGED_USER)

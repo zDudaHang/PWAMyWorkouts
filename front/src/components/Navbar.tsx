@@ -1,12 +1,12 @@
 import { Button, HFlow, Icon, Link, Text } from "bold-ui"
 import React, { useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import { LOCAL_STORAGE_LOGGED_USER } from "../constants"
 import { LoggedUserContext } from "./context/LoggedUserContext"
 import { useOnlineStatus } from "./context/useOnlineStatus"
 import {
   CREATE_WORKOUT_URL,
   FEED_URL,
-  LOCAL_STORAGE_LOGGED_USER,
   LOGIN_URL,
   MY_SAVED_WORKOUTS_URL,
 } from "./root/model"
@@ -34,7 +34,7 @@ export function Navbar() {
           <Text>Welcome, {user.username}</Text>
           <Link href={FEED_URL}>Feed</Link>
           <Link href={MY_SAVED_WORKOUTS_URL}>My saved workouts</Link>
-          {isOnline && <Link href={CREATE_WORKOUT_URL}>Submit workout</Link>}
+          {isOnline && <Link href={CREATE_WORKOUT_URL}>Create workout</Link>}
           <Button size="small" skin="ghost" onClick={handleLogout}>
             Logout
           </Button>
