@@ -66,10 +66,10 @@ this.addEventListener("push", function (e) {
     body = "Push message no payload"
   }
 
-  const { title, usename } = JSON.parse(body)
+  const newWorkout = JSON.parse(body)
 
   var options = {
-    body: title,
+    body: newWorkout.title,
     icon: "images/weight128.png",
     vibrate: [100, 50, 100],
     data: {
@@ -79,7 +79,7 @@ this.addEventListener("push", function (e) {
   }
   e.waitUntil(
     this.registration.showNotification(
-      `@${usename} created a new workout !`,
+      `@${newWorkout.username} created a new workout !`,
       options
     )
   )

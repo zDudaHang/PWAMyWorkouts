@@ -45,6 +45,7 @@ export function CreateWorkout() {
               label="Title"
               required
               clearable={false}
+              maxLength={50}
             />
           </Cell>
           <Cell size={6}>
@@ -54,6 +55,7 @@ export function CreateWorkout() {
               label="Description"
               required
               clearable={false}
+              maxLength={500}
             />
           </Cell>
           <Cell size={6}>

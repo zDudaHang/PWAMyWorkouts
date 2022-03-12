@@ -12,7 +12,9 @@ export function verifyNotificationPermission(
           alert(
             "You have denied permission for notifications. Please go to your browser or mobile settings and enable notifications"
           )
-          return
+        } else if (status === "granted") {
+          subscribeUser(userId)
+          alert(`Now, you're following @${creatorName}!`)
         }
       })
     } else if (permission === "denied") {
@@ -21,6 +23,7 @@ export function verifyNotificationPermission(
       )
     } else {
       subscribeUser(userId)
+      alert(`Now, you're following @${creatorName}!`)
     }
   }
 }

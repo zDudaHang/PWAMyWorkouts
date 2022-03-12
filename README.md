@@ -14,7 +14,7 @@ Nas seções seguintes, será demonstrado como rodar tanto o servidor (back) com
 
 ### Instalando os pacotes
 Primeiro, verifique se os seguintes pacotes estão instalados:
-- Node.js
+- Node.js com versão igual ou maior a 16
 - NPM
 - Yarn
 - Docker

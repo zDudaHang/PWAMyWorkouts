@@ -96,7 +96,7 @@ user_router.post("/createWorkout", (req, res) => {
                   endpoint,
                   keys: { auth: sub_private_key, p256dh: sub_public_key },
                 },
-                JSON.stringify({ title, description, username })
+                JSON.stringify({ title, username })
               )
             }
           )

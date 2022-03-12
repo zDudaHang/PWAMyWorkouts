@@ -1,4 +1,4 @@
-import { Button, Icon, VFlow } from "bold-ui"
+import { Button, Icon, Tooltip, VFlow } from "bold-ui"
 import React, { useContext } from "react"
 import { db } from "../../db"
 import { WorkoutModel } from "../../../../model/model"
@@ -32,7 +32,8 @@ export function PublicationView(props: PublicationViewProps) {
       const apiURL = isFollowing ? "unfollow" : "follow"
       fetch(`api/${apiURL}/${workout.creator.id}/${user.id}`, requestOptions)
       updateFollowingIds(workout.creator.id)
-      verifyNotificationPermission(workout.creator.username, user.id)
+      !isFollowing &&
+        verifyNotificationPermission(workout.creator.username, user.id)
     }
   }
 
@@ -43,13 +44,21 @@ export function PublicationView(props: PublicationViewProps) {
         <Icon icon="download" style={{ marginRight: "0.5rem" }} />
         Save
       </Button>
-      <Button size="small" skin="ghost" onClick={handleFollowClick}>
-        <Icon
-          icon={isFollowing ? "bellFilled" : "bellOutline"}
-          style={{ marginRight: "0.5rem" }}
-        />
-        {isFollowing ? "Unfollow " : "Follow"} {workout.creator.username}
-      </Button>
+      <Tooltip
+        text={
+          !isFollowing
+            ? "You will get notifications when that user creates new workouts"
+            : ""
+        }
+      >
+        <Button size="small" skin="ghost" onClick={handleFollowClick}>
+          <Icon
+            icon={isFollowing ? "bellFilled" : "bellOutline"}
+            style={{ marginRight: "0.5rem" }}
+          />
+          {isFollowing ? "Unfollow " : "Follow"} {workout.creator.username}
+        </Button>
+      </Tooltip>
     </VFlow>
   )
 }
