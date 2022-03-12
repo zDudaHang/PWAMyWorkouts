@@ -76,7 +76,7 @@ Em seguida, crie a seguinte variável de ambiente:
 
 #### Rodando o cliente
 
-Por fim, execute os seguintes comandos:
+Por fim, execute os seguintes comandos em um novo terminal:
 
 `cd front`\
 `yarn install`\
