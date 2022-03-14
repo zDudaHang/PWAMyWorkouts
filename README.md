@@ -83,3 +83,11 @@ Por fim, execute os seguintes comandos em um novo terminal:
 `yarn start`
 
 Depois de alguns segundos, uma nova janela ou aba do navegador deve ser aberta com a interface da aplicação
+
+## Ferramentas para testar as funcionaliades do PWA:
+[Como simular uma perda de conexão](https://developers.google.com/web/ilt/pwa/tools-for-pwa-developers#simulate_offline_behavior) \
+[Vendo o manifesto](https://developers.google.com/web/ilt/pwa/tools-for-pwa-developers#inspect_the_manifest) \
+[Vendo o service worker e interagindo com ele](https://developers.google.com/web/ilt/pwa/tools-for-pwa-developers#interact_with_service_workers_in_the_browser) \
+[Vendo a Cache](https://developers.google.com/web/ilt/pwa/tools-for-pwa-developers#inspect_cache_storage) \
+[Vendo a IndexedDB](https://developers.google.com/web/ilt/pwa/tools-for-pwa-developers#check_indexeddb) \
+[Como instalar um PWA pelo Chrome](https://support.google.com/chrome/answer/9658361?hl=pt-BR&co=GENIE.Platform%3DDesktop)
